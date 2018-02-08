@@ -1,6 +1,6 @@
 {
   "name": "graphql-fusion",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Merge GraphQL Queries",
   "main": "fusion.js",
   "typings": "fusion.d.ts",
