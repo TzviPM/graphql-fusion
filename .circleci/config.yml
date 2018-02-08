@@ -3,25 +3,20 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.9.4
+    working_directory: ~/graphql-fusion
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          keys:
+          - v1-dependencies-{{ checksum "yarn.lock" }}
+          - v1-dependencies-
       - run:
           name: yarn install
           command: yarn
       - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
-
-  test:
-    docker:
-      - image: circleci/node:8.9.4
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
       - run:
           name: test
           command: yarn jest --ci --testResultsProcessor="jest-junit"
@@ -31,12 +26,3 @@ jobs:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
-
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
-      - test:
-          requires:
-            - build
