@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build-and-test:
     docker:
       - image: circleci/node:8.9.4
     working_directory: ~/graphql-fusion
@@ -26,3 +26,29 @@ jobs:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
+
+  deploy:
+      docker:
+        - image: circleci/node:8.9.4
+      working_directory: ~/graphql-fusion
+      steps:
+        - run:
+            name: Install NPM token
+            command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+        - run:
+            name: Deploy if tests pass and branch is Master
+            command: npm publish
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build-and-test
+      - deploy:
+          requires:
+            - build-and-test
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
