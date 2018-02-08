@@ -32,6 +32,11 @@ jobs:
         - image: circleci/node:8.9.4
       working_directory: ~/graphql-fusion
       steps:
+        - checkout
+        - restore_cache:
+            keys:
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+            - v1-dependencies-
         - run:
             name: Install NPM token
             command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
