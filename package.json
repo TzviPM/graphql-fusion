@@ -10,7 +10,8 @@
     "clean": "rimraf '*.{js,d.ts}'",
     "prebuild": "yarn run clean",
     "build": "tsc",
-    "prepublish": "in-publish && yarn run build || :"
+    "prepublish": "in-publish && yarn run build || :",
+    "test": "./test.sh"
   },
   "private": false,
   "devDependencies": {
@@ -36,9 +37,11 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "collectCoverage": true
   },
   "dependencies": {
+    "coveralls": "^3.1.0",
     "graphql": "^0.12.3",
     "graphql-tag": "^2.6.1",
     "uuid": "^3.2.1"
